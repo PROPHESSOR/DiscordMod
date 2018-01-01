@@ -309,35 +309,40 @@ class Module {
 	constructor (folder) {
 		if (!folder) throw new Error('DiscordMod->Module: Error: folder is not defined!');
 
+		const module_json = `${Config.moduleFolder}/${folder}/module.json`;
+
 		let moduleData = null;
 		try {
-			moduleData = require(`${folder}/module.json`);
+			moduleData = require(module_json);
 		} catch (e) {
-			throw new Error(`Module in the folder ${folder} doesn't exist!`);
+			throw new Error(`Module in the folder ${module_json} doesn't exist!`);
 		}
 
-		this.name = moduleData.name || 'name';
+		this.modulename = moduleData.name || 'name';
 		this.author = moduleData.author || 'author';
 		this.description = moduleData.description || 'description';
 		this.url = moduleData.url || 'url';
 		this.type = moduleData.type || 'type';
 		this.main = moduleData.main || 'main';
+		this.folder = folder;
+		this.fullfolder = `${Config.moduleFolder}/${folder}`;
 	}
 
 	start (dmodMain) {
 		if (this.type === 'backend') {
-			const content = fs.readFileSync(this.main); // TODO: Async
+			const content = fs.readFileSync(`${this.fullfolder}/${this.main}`); // TODO: Async
 			try {
-				return eval(`function(__Main, __Utils, __Module){${content}}(dmodMain, dmodMain.utils, Module)`); //eslint-disable-line
+				return eval(`(function(__Main, __Utils, __Module){${content.toString()}})(dmodMain, dmodMain.utils, Module);`); //eslint-disable-line
 			} catch (e) {
 				console.error(e);
 
 				return e;
 			}
-		} else if (this.type === 'fontend') {
-			const content = fs.readFileSync(this.main); // TODO: Async
-			dmodMain.utils.execJs(content);
-			// TODO: Inject HTML
+		} else if (this.type === 'frontend') {
+			const content = fs.readFileSync(`${this.fullfolder}/${this.main}`); // TODO: Async
+			dmodMain.utils.execJs(content.toString());
+			console.log(content.toString());
+			dmodMain.utils.execJs('window.b="b"');
 		} else {
 			throw new Error(`Unknown module type ${this.type}`);
 		}
@@ -370,9 +375,9 @@ class Module {
 		for (const _module of modules) {
 			try {
 				_module.start(dmodMain);
-				console.log(`DiscordMod: Started module ${_module}`); // TODO: Logger
+				console.log(`DiscordMod: Started module ${_module.modulename}`); // TODO: Logger
 			} catch (e) {
-				console.error(`DiscordMod->loadModules: Can't start module ${_module.name}; ${e}`);
+				console.error(`DiscordMod->loadModules: Can't start module ${_module.modulename}; ${e}`);
 			}
 		}
 
