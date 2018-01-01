@@ -302,6 +302,7 @@ class Main {
 
 	init () {
 		this.utils.jsLog('DiscordMod installed!');
+		console.log('DiscordMod installed!');
 	}
 }
 
