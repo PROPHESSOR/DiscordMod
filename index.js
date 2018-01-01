@@ -290,20 +290,47 @@ class Utils {
 }
 
 
-class Main {
+class Main extends require('events') {
 	constructor (mainWindow) {
 		if (!mainWindow) return console.error('DiscordMod kernel panic! Code: 1');
+		super();
 		this.mainWindow = mainWindow;
 		this.utils = new Utils(mainWindow);
 		this.Utils = Utils;
 
 		this.init();
+
+		Main.child = this;
 	}
 
 	init () {
 		this.utils.jsLog('DiscordMod installed!');
 		console.log('DiscordMod installed!');
 	}
+
+	/** Добавляет пункт DiscordMod в настройки
+	 * @returns {undefined} void
+	 */
+	injectSettings () {
+		// this.utils.
+	}
+
+	/** Выполняет код от имени DiscordMod. Для теста API!
+	 * @param  {string} code - JavaScript код
+	 * @returns {*} Результат eval, или ошибка
+	 */
+	eval (code) {
+		try {
+			return eval(code); //eslint-disable-line
+		} catch (e) {
+			return e;
+		}
+	}
+
+	// Modules
+	/**
+	 */
+	loadModules () {}
 }
 
 module.exports = Main;
