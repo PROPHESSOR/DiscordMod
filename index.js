@@ -292,10 +292,17 @@ class Utils {
 
 class Main {
 	constructor (mainWindow) {
+		if (!mainWindow) return console.error('DiscordMod kernel panic! Code: 1');
 		this.mainWindow = mainWindow;
 		this.utils = new Utils(mainWindow);
 		this.Utils = Utils;
+
+		this.init();
+	}
+
+	init () {
+		this.utils.jsLog('DiscordMod installed!');
 	}
 }
 
-module.exports = new Main();
+module.exports = Main;
