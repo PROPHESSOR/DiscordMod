@@ -11,14 +11,22 @@
  * Original code from BetterDiscordApp
  * https://github.com/Jiiks/BetterDiscordApp
  * Modded by PROPHESSOR
-*/
+ */
 
 const https = require('https');
 const http = require('http');
-const _fs = require('fs');
+const fs = require('fs');
+const electron = require('electron');
 
 const eol = require('os').EOL;
 let logs = '';
+
+const modules = [];
+
+const Config = {
+	appDataFolder: electron.app.getPath('appData'),
+	moduleFolder: `${electron.app.getPath('appData')}/DiscordMod/modules`
+};
 
 class Utils {
 
@@ -138,7 +146,7 @@ class Utils {
 
 	saveLogs (path) {
 		try {
-			_fs.writeFileSync(path + '/logs.log', logs);
+			fs.writeFileSync(path + '/logs.log', logs);
 		} catch (err) {}
 	}
 
@@ -149,7 +157,7 @@ class Utils {
 
 	// Parse and execute javascript
 	execJsParse (js) {
-		this.execJs(js); // TODO
+		this.execJs(js); // TODO:
 	}
 
 	// Inject variable
@@ -222,9 +230,9 @@ class Utils {
 	}
 
 	mkdirSync (path) {
-		if (!_fs.existsSync(path)) {
+		if (!fs.existsSync(path)) {
 			this.log('Directory ' + path + ' does not exist. Creating');
-			_fs.mkdirSync(path);
+			fs.mkdirSync(path);
 		}
 	}
 
@@ -289,11 +297,94 @@ class Utils {
 	}
 }
 
+class Module {
+	/*
+	 * TODO: Normalize path
+	 * TODO: -> Windows support
+	 * TODO: Logger
+	 * TODO: Async
+	 *
+	*/
+
+	constructor (folder) {
+		if (!folder) throw new Error('DiscordMod->Module: Error: folder is not defined!');
+
+		let moduleData = null;
+		try {
+			moduleData = require(`${folder}/module.json`);
+		} catch (e) {
+			throw new Error(`Module in the folder ${folder} doesn't exist!`);
+		}
+
+		this.name = moduleData.name || 'name';
+		this.author = moduleData.author || 'author';
+		this.description = moduleData.description || 'description';
+		this.url = moduleData.url || 'url';
+		this.type = moduleData.type || 'type';
+		this.main = moduleData.main || 'main';
+	}
+
+	start (dmodMain) {
+		if (this.type === 'backend') {
+			const content = fs.readFileSync(this.main); // TODO: Async
+			try {
+				return eval(`function(__Main, __Utils, __Module){${content}}(dmodMain, dmodMain.utils, Module)`); //eslint-disable-line
+			} catch (e) {
+				console.error(e);
+
+				return e;
+			}
+		} else if (this.type === 'fontend') {
+			const content = fs.readFileSync(this.main); // TODO: Async
+			dmodMain.utils.execJs(content);
+			// TODO: Inject HTML
+		} else {
+			throw new Error(`Unknown module type ${this.type}`);
+		}
+	}
+
+	static loadModules (dmodMain) {
+		const modules_json = `${Config.moduleFolder}/modules.json`;
+		if (!fs.existsSync(modules_json)) return console.warn(`DiscordMod->loadModules: Can't open ${modules_json}! Abort.`);
+
+		let _modules; //eslint-disable-line
+		try {
+			_modules = require(modules_json);
+		} catch (e) {
+			console.error(e);
+
+			return console.warn(`DiscordMod->loadModules: Can't open ${modules_json}! Abort.`);
+		}
+
+		for (const _module of _modules) {
+			try {
+				modules.push(new Module(_module));
+				console.log(`DiscordMod: Loaded module ${_module}`); // TODO: Logger
+			} catch (e) {
+				console.error(`DiscordMod->loadModules: Can't load module ${_module}; ${e}`);
+			}
+		}
+
+		console.log(`DiscordMod: Loaded ${modules.length} modules!`);
+
+		for (const _module of modules) {
+			try {
+				_module.start(dmodMain);
+				console.log(`DiscordMod: Started module ${_module}`); // TODO: Logger
+			} catch (e) {
+				console.error(`DiscordMod->loadModules: Can't start module ${_module.name}; ${e}`);
+			}
+		}
+
+		console.log('DiscordMod: Modules started successful!');
+	}
+}
 
 class Main extends require('events') {
 	constructor (mainWindow) {
 		if (!mainWindow) return console.error('DiscordMod kernel panic! Code: 1');
 		super();
+		this.test();
 		this.mainWindow = mainWindow;
 		this.utils = new Utils(mainWindow);
 		this.Utils = Utils;
@@ -301,6 +392,12 @@ class Main extends require('events') {
 		this.init();
 
 		Main.child = this;
+
+		Module.loadModules(this);
+	}
+
+	test () {
+		console.log(Config.moduleFolder);
 	}
 
 	init () {
@@ -326,11 +423,9 @@ class Main extends require('events') {
 			return e;
 		}
 	}
-
-	// Modules
-	/**
-	 */
-	loadModules () {}
 }
+
+Main.Utils = Utils;
+Main.Module = Module;
 
 module.exports = Main;

@@ -37,7 +37,7 @@
       "1tbs"
     ],
     "callback-return": "error",
-    "camelcase": "error",
+    "camelcase": "off",
     "capitalized-comments": [
       "off",
       "always"
