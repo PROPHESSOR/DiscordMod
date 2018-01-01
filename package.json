@@ -1,0 +1,31 @@
+{
+  "name": "dminjector",
+  "version": "0.0.1",
+  "description": "It's a DiscordMod injector!",
+  "main": "injector.js",
+  "bin" : {
+    "dminjector" : "./injector.js"
+  },
+  "scripts": {
+    "test": "echo ..."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PROPHESSOR/DiscordModAPI.git"
+  },
+  "keywords": [
+    "discord",
+    "mod",
+    "injector",
+    "discordmod"
+  ],
+  "author": "PROPHESSOR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PROPHESSOR/DiscordModAPI/issues"
+  },
+  "homepage": "https://github.com/PROPHESSOR/DiscordModAPI#readme",
+  "dependencies": {
+    "asar": "latest"
+  }
+}

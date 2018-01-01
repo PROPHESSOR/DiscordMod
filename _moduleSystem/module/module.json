@@ -1,8 +1,0 @@
-{
-	"name": "TestModule",
-	"author": "PROPHESSOR",
-	"url": "https://github.com/PROPHESSOR",
-	"description": "A test module which sends to the console 'hello world' message",
-	"main": "index.js",
-	"type": "frontend/backend"
-}

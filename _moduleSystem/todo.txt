@@ -1,2 +1,0 @@
-TODO:
-[ ] Избавится от modules.json
