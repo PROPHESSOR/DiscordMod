@@ -171,9 +171,9 @@ class Utils {
 
 	// Alert
 	alert (title, message) {
-		let id = 'bdalert-';
+		let id = 'dmalert-';
 		for (let i = 0; i < 5; i++) id += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.length));
-		const bdAlert = `
+		const dmAlert = `
 	<div id="${id}" class="modal" style="opacity:1">
 		<div class="modal-inner">
 			<div class="markdown-modal">
@@ -182,7 +182,7 @@ class Utils {
 						<span>DiscordMod - </span><span>${title}</span>
 					</strong>
 					<span></span>
-					<button class="markdown-modal-close" onclick="document.getElementById('${id}').remove();"></button>
+					<button class="markdown-modal-close" onclick=document.getElementById("${id}").remove();></button>
 				</div>
 				<div class="scroller-wrap fade">
 					<div style="font-weight:700" class="scroller">${message}</div>
@@ -194,9 +194,11 @@ class Utils {
 			</div>
 		</div>
 	</div>
-	`;
+	`.replace(/[	\n]/g, '');
 
-		this.execJs('document.body.insertAdjacentHTML(\'afterbegin\', "' + bdAlert + '");');
+		this.execJs(`document.body.insertAdjacentHTML('afterbegin', \`${dmAlert}\`);`);
+		// this.jsLog(`document.body.innerHTML += '${bdAlert}';`);
+		// console.log(`document.body.innerHTML += '${bdAlert}';`);
 	}
 
 	// Css internal style injector
@@ -223,7 +225,7 @@ class Utils {
 
 	injectJavaScript (url, jquery) {
 		if (jquery) {
-			this.execJs(' (function() { function injectJs() { var script = document.createElement("script"); script.type = "text/javascript"; document.getElementsByTagName("body")[0].appendChild(script); script.src = "' + url + '"; } function jqDefer() { if(window.jQuery) { injectJs(); }else{ setTimeout(function() { jqDefer(); }, 100) } } jqDefer(); })(); ');
+			this.execJs(' (function() { function injectJs() { var script = document.createElement("script"); script.type = "text/javascript"; document.getElementsByTagName("body")[0].appendChild(script); script.src = "' + url + '"; } function jqDefer() { if(window.jQuery) { injectJs(); }else{ setTimeout(function() { jqDefer(); }, 100) } } jqDefer(); })(); '); // FIXME: ШТАБЛИН?
 		} else {
 			this.execJs('(function() { var script = document.createElement("script"); script.type = "text/javascript"; document.getElementsByTagName("body")[0].appendChild(script); script.src = "' + url + '"; })();');
 		}
@@ -341,8 +343,6 @@ class Module {
 		} else if (this.type === 'frontend') {
 			const content = fs.readFileSync(`${this.fullfolder}/${this.main}`); // TODO: Async
 			dmodMain.utils.execJs(content.toString());
-			console.log(content.toString());
-			dmodMain.utils.execJs('window.b="b"');
 		} else {
 			throw new Error(`Unknown module type ${this.type}`);
 		}
@@ -364,7 +364,7 @@ class Module {
 		for (const _module of _modules) {
 			try {
 				modules.push(new Module(_module));
-				console.log(`DiscordMod: Loaded module ${_module}`); // TODO: Logger
+				console.log(`DiscordMod: Loaded module from ${_module}`); // TODO: Logger
 			} catch (e) {
 				console.error(`DiscordMod->loadModules: Can't load module ${_module}; ${e}`);
 			}
@@ -402,10 +402,13 @@ class Main extends require('events') {
 	}
 
 	test () {
-		console.log(Config.moduleFolder);
+		// console.log(Config.moduleFolder);
 	}
 
 	init () {
+
+		this.utils.jsLog('Loading Resource (jQuery)', 0, 100);
+		this.utils.injectJavaScriptSync('//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js', 'load-jQueryCookie');
 		this.utils.jsLog('DiscordMod installed!');
 		console.log('DiscordMod installed!');
 	}
