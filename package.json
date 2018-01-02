@@ -28,6 +28,8 @@
   "dependencies": {
     "asar": "latest",
     "diff": "^3.4.0",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
   }
 }
