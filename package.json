@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "It's a DiscordMod patch creator!",
   "scripts": {
-    "create": "diff -ru1 origin asar > patch.diff || exit 0",
+    "create": "diff -ru1 origin asar > patch.diff; md5sum /usr/share/discord/resources/_app.asar | awk '{ print $1 }' > md5.txt; exit 0",
     "init": "asar e /usr/share/discord/resources/_app.asar origin"
   },
   "repository": {

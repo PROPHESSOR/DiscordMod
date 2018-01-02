@@ -1,6 +1,6 @@
 diff -ru1 origin/index.js asar/index.js
---- origin/index.js	2018-01-02 19:09:09.284558068 +0200
-+++ asar/index.js	2018-01-02 18:34:35.038000000 +0200
+--- origin/index.js	2018-01-02 19:57:48.145813796 +0200
++++ asar/index.js	2018-01-02 19:54:46.178990708 +0200
 @@ -1 +1,8 @@
 +
 +/**
@@ -30,9 +30,10 @@ diff -ru1 origin/index.js asar/index.js
 -main();
 +main();
 \ No newline at end of file
+Only in origin: node_modules
 diff -ru1 origin/splash/index.css asar/splash/index.css
---- origin/splash/index.css	2018-01-02 19:09:09.684564361 +0200
-+++ asar/splash/index.css	2018-01-02 18:34:52.167000000 +0200
+--- origin/splash/index.css	2018-01-02 19:57:48.561820249 +0200
++++ asar/splash/index.css	2018-01-02 19:54:46.182990770 +0200
 @@ -1,195 +1,201 @@
 +/* 
 + * DiscordMod
