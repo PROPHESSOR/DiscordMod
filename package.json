@@ -1,13 +1,10 @@
 {
-  "name": "dminjector",
+  "name": "dmpatchcreator",
   "version": "0.0.1",
-  "description": "It's a DiscordMod injector!",
-  "main": "injector.js",
-  "bin": {
-    "dminjector": "./injector.js"
-  },
+  "description": "It's a DiscordMod patch creator!",
   "scripts": {
-    "test": "echo ..."
+    "create": "diff -ru1 origin asar > patch.diff || exit 0",
+    "init": "asar e /usr/share/discord/resources/_app.asar origin"
   },
   "repository": {
     "type": "git",
