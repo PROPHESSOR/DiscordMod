@@ -6,13 +6,6 @@
 
 'use strict';
 
-/*
- * Utils
- * Original code from BetterDiscordApp
- * https://github.com/Jiiks/BetterDiscordApp
- * Modded by PROPHESSOR
- */
-
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
@@ -27,6 +20,13 @@ const Config = {
 	appDataFolder: electron.app.getPath('appData'),
 	moduleFolder: `${electron.app.getPath('appData')}/DiscordMod/modules`
 };
+
+/*
+ * Utils
+ * Original code from BetterDiscordApp
+ * https://github.com/Jiiks/BetterDiscordApp
+ * Modded by PROPHESSOR
+ */
 
 class Utils {
 
@@ -107,7 +107,7 @@ class Utils {
 		this.execJs('document.getElementById("bd-pbar").max = ' + max + ';');
 	}
 
-	// Logger
+	// Logger FIXME: Долбать здесь говнокод!
 	log (message) {
 		console.log('[DiscordMod INF] ' + message);
 		const d = new Date();
@@ -194,7 +194,8 @@ class Utils {
 			</div>
 		</div>
 	</div>
-	`.replace(/[	\n]/g, '');
+	`.replace(/[	\n]/g, ''); // eslint-disable-line
+		// Remove tabs and endls
 
 		this.execJs(`document.body.insertAdjacentHTML('afterbegin', \`${dmAlert}\`);`);
 		// this.jsLog(`document.body.innerHTML += '${bdAlert}';`);
