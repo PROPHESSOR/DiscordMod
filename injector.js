@@ -79,8 +79,9 @@ async function run() {
 	 * 7. Упаковываем этот мусор в asar
 	 * 8. Помещаем asar на место оригинала
 	 */
-// fs.rmdirSync(TMP_FOLDER);
 
-// asar.createPackage(path, 'her.asar');
+	asar.createPackage(TMP_FOLDER, path, ()=>console.log('OK'));
+
+	fs.rmdirSync(TMP_FOLDER);
 }
 run();
