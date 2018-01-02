@@ -27,7 +27,7 @@ if (!path) return console.log('Usage:\n node injector.js /path/to/discord/resour
 const TMP_FOLDER = 'origin2';
 
 const GITHUB_PATCH = 'https://github.com/PROPHESSOR/DiscordModAPI/raw/patch/patch.diff';
-const GITHUB_MD5 = '';
+const GITHUB_MD5 = 'https://github.com/PROPHESSOR/DiscordModAPI/raw/patch/md5.txt';
 
 /**
  * Алгоритм
@@ -49,7 +49,7 @@ const rp = require('request-promise-native');
 
 async function run() { 
 	const patch = await rp(GITHUB_PATCH);
-	const MD5 = await rp(GITHUB_MD5);
+	const MD5 = (await rp(GITHUB_MD5)).trim();
 	if (md5(fs.readFileSync(path)) !== MD5) return console.log('Unsupported version of Discord or Discord is already patched');
 
 	fs.copyFileSync(path, `${path}_`); //* 3. Бэкапим оригинальный asar файл
