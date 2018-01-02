@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "It's a DiscordMod injector!",
   "main": "injector.js",
-  "bin" : {
-    "dminjector" : "./injector.js"
+  "bin": {
+    "dminjector": "./injector.js"
   },
   "scripts": {
     "test": "echo ..."
@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/PROPHESSOR/DiscordModAPI#readme",
   "dependencies": {
-    "asar": "latest"
+    "asar": "latest",
+    "diff": "^3.4.0",
+    "md5": "^2.2.1"
   }
 }
