@@ -16,7 +16,8 @@ DiscordMod не устанавливается, а вшивается в Discord
 Далее выполните команды в папке, куда распаковали injector:
 ```
 npm i #Инициализация
-node injector.js путь_к_asar_файлу```
+node injector.js путь_к_asar_файлу
+```
 
 Путь к asar файлу зависит от операционной системы, вот несколько примеров:
  - Windows: C:/Program Files/Discord/resources/app.asar
