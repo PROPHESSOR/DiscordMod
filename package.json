@@ -1,0 +1,12 @@
+{
+    "name": "discordmod",
+    "description": "Moddable Discord =)",
+    "main": "core.js",
+    "private": true,
+    "author": "PROPHESSOR",
+    "license": "MIT",
+    "scripts": {
+        "inject": "sudo ln -s $(pwd) /usr/share/discord/resources/app",
+        "uninstall": "sudo rm /usr/share/discord/resources/app"
+    }
+}
