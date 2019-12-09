@@ -2,17 +2,16 @@
 // /usr/share/discord/resources/app/package.json
 // /usr/share/discord/resources/app/client.js
 
-const DEBUG = true; // Verbose
+const DEBUG = false; // Verbose
 
 const fs = require('fs');
 const path = require('path');
 const electron = require('electron');
 
-
 // Launch Discord
 {
     const Module = require('module');
-    const basePath = path.join(__dirname, '..', 'app.asar');
+    const basePath = '/usr/share/discord/resources/app.asar'; // __dirname не работает из-за символической ссылки
     electron.app.getAppPath = () => basePath;
     Module._load(basePath, null, true);
 }
@@ -39,6 +38,7 @@ function filterDiscordWindow() {
 	if (all.length) {
 		if (DEBUG) console.log('Found Discord Window');
 		const [a] = all;
-		a.executeJavaScript(fs.readFileSync(path.join(__dirname, 'client.js'), 'utf-8'));
+        a.executeJavaScript(fs.readFileSync(path.join(__dirname, 'client.js'), 'utf-8'));
+        console.info('[DiscordMod] Injected! :)');
 	}
 }
